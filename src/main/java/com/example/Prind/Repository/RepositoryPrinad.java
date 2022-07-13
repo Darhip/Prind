@@ -17,8 +17,7 @@ public class RepositoryPrinad {
     public List<Prinad> findALL() throws IOException {
         File file = new File("src/main/resources/prinad.yaml");
         ObjectMapper om = new ObjectMapper(new YAMLFactory());
-        List<Prinad> prinads = new ArrayList<>(Arrays.asList(om.readValue(file, Prinad[].class)));
-        return prinads;
+        return new ArrayList<>(Arrays.asList(om.readValue(file, Prinad[].class)));
     }
     public void addPrinad(List<Prinad> prinads) throws IOException {
         ObjectMapper om = new ObjectMapper(new YAMLFactory());
@@ -35,12 +34,22 @@ public class RepositoryPrinad {
     }
     public Prinad getBySerialNumber(int snum) throws IOException, IllegalAccessError {
         final List<Prinad> prinads = findALL();
-        for (int i = 0; i < prinads.size(); i++){
-            if (prinads.get(i).getSerialNum() == snum){
-                return prinads.get(i);
+        for (Prinad prinad : prinads) {
+            if (prinad.getSerialNum() == snum) {
+                return prinad;
             }
         }
         throw new IllegalAccessError("Not found choose another number!");
+    }
+
+    public boolean isExistPrinadBySnum(int snum) throws IOException, IllegalAccessError {
+        final List<Prinad> prinads = findALL();
+        for (Prinad prinad : prinads) {
+            if (prinad.getSerialNum() == snum) {
+                return true;
+            }
+        }
+        return false;
     }
     public void deleteByPrinad(int snum) throws IOException {
         final List<Prinad> prinads = findALL().stream()
